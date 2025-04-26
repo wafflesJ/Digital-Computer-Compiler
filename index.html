@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6502 Emulator</title>
+  <link rel="icon" href="https://static.thenounproject.com/png/7371706-200.png" type="image/x-icon">
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="select" id="select">
+    <h1 style="color: white; font-family:'Cascadia Code',monospace;">6502 Assembly Emulator and Editor</h1>
+    <form class="form" id="new-button">
+      <input autocomplete="off" type="text"class="text-box"placeholder="Project Name" id="nameField" required="">
+        <button type="submit" class="button-submit">Create New</button>
+      </input>
+    </form>
+    <br>
+    <b style="color: white; font-family: 'Arial', sans-serif;">Load Existing File</b>
+    <div class="load-container" id="loadCont"></div>
+  </div>
+  <div class="BODY">
+  <div class="editor">
+    <div class="highlight" id="highlight"></div>
+    <textarea id="editor"spellcheck="false"placeholder="Type Your Code Here"></textarea>
+  </div>
+  <div class="buttonHolder">
+    <button class="button-compile"title="Compile" id="compile">
+      <img src="https://static.thenounproject.com/png/4622129-200.png"class="img">
+    </button>
+    <button class="button-run"title="Run Program" id="run">
+      <img src="https://static.thenounproject.com/png/4622109-200.png"class="img"id="tog">
+    </button>
+    <button class="button-pause"title="Toggle Running" id="pause">
+      <img src="https://static.thenounproject.com/png/7490378-200.png"class="img"id="togB">
+    </button>
+    <div class="save">Clock Speed:</div>
+    <input class="speed"type="text" value="10.00 Hz" id="speed" autocomplete="off"></input>
+    <div class="save" id="saved">Saved</div>
+    <button class="button-menu"title="Return To Menu" id="menu">
+      <img src="https://raw.githubusercontent.com/microsoft/vscode-codicons/0277f11af85ae3b7ef54765d331f79ea002e3ed0/src/icons/list-flat.svg"class="imgAlt">   Menu
+    </button>
+  </div>
+  <div class="output">Output:
+  <div id="output" class="output-text"></div>
+  </div>
+  </div>
+  <!-- Scripts -->
+  <script type="module" src="page.js"></script>
+  <script type="module" src="compiler.js"></script>
+  <script type="module" src="computer.js"></script>
+</body>
+</html>
