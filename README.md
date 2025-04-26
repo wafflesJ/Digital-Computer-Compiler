@@ -39,61 +39,61 @@ bne loop ;Continue to loop until X equals 12
 - 0x100 though 0x1FF are the stack, they may be used but it isn't recomened
 - 0xFC though 0xFF store current key inputs in ASCII
 # Full Instruction Set:
-| Instruction | Takes Value | Description |
+| Instruction | Takes Value |Bits| Description |
 |------------|-------|-------------|
-| nop        | No    | Does nothing |
-| lda        | Yes   | Load a value into the accumulator  |
-| ldx        | Yes   | Load a value into the X register  |
-| ldy        | Yes   | Load a value into the Y register  |
-| sta        | Yes   | Store the accumulator value in memory ( |
-| stx        | Yes   | Store the X register value in memory  |
-| sty        | Yes   | Store the Y register value in memory  |
-| adc        | Yes   | Add a value to the accumulator with the carry  |
-| sbc        | Yes   | Subtract a value from the accumulator with the carry|
-| and        | Yes   | Perform a bitwise AND on the accumulator  |
-| ora        | Yes   | Perform a bitwise OR on the accumulator  |
-| eor        | Yes   | Perform a bitwise XOR on the accumulator  |
-| cmp        | Yes   | Compare accumulator with value  |
-| cpx        | Yes   | Compare X register with value  |
-| cpy        | Yes   | Compare Y register with value  |
-| bit        | Yes   | Test bits in a memory location against the accumulator  |
-| inc        | Yes   | Increment the value at the memory location by 1  |
-| inx        | No    | Increment the X register by 1  |
-| iny        | No    | Increment the Y register by 1  |
-| dec        | Yes   | Decrement the value at the memory location by 1  |
-| dex        | No    | Decrement the X register by 1  |
-| dey        | No    | Decrement the Y register by 1  |
-| bcc        | Yes   | Branch if carry is clear  |
-| bcs        | Yes   | Branch if carry is set  |
-| beq        | Yes   | Branch if zero flag is set  |
-| bmi        | Yes   | Branch if negative flag is set  |
-| bne        | Yes   | Branch if zero flag is clear  |
-| bpl        | Yes   | Branch if negative flag is clear  |
-| bvc        | Yes   | Branch if overflow flag is clear  |
-| bvs        | Yes   | Branch if overflow flag is set  |
-| jmp        | Yes   | Jump to a specified address  |
-| jsr        | Yes   | Jump to a subroutine  |
-| rts        | No    | Return from subroutine  |
-| pha        | No    | Push accumulator onto the stack  |
-| php        | No    | Push processor status onto the stack  |
-| pla        | No    | Pull accumulator from the stack  |
-| plp        | No    | Pull processor status from the stack  |
-| tax        | No    | Transfer accumulator to X register  |
-| tay        | No    | Transfer accumulator to Y register  |
-| txa        | No    | Transfer X register to accumulator  |
-| tya        | No    | Transfer Y register to accumulator  |
-| tsx        | No    | Transfer stack pointer to X register  |
-| txs        | No    | Transfer X register to stack pointer  |
-| rol        | No    | Rotate bits left   |
-| ror        | No    | Rotate bits right |
-| lsr        | No    | Logical shift right  |
-| lsl        | No    | Logical shift left  |
-| wrt        | Yes   | Output directly |
-| wrb        | Yes   | Output to the screen buffer |
-| dsb        | No    | Display buffer |
-| clb        | No    | Clear screen buffer |
-| cls        | No    | Clear screen |
-| ssb        | No    | Set screen to buffer |
+| nop        | No    |0000000010| Does nothing |
+| lda        | Yes   |000001001?| Load a value into the accumulator  |
+| ldx        | Yes   |000000101?| Load a value into the X register  |
+| ldy        | Yes   |000000011?| Load a value into the Y register  |
+| sta        | Yes   |0010000010| Store the accumulator value in memory |
+| stx        | Yes   |0001000010| Store the X register value in memory  |
+| sty        | Yes   |0000100010| Store the Y register value in memory  |
+| adc        | Yes   |0010000000| Add a value to the accumulator with the carry  |
+| sbc        | Yes   |0000000000| Subtract a value from the accumulator with the carry|
+| and        | Yes   |0000000000| Perform a bitwise AND on the accumulator  |
+| ora        | Yes   |0000000000| Perform a bitwise OR on the accumulator  |
+| eor        | Yes   |0000000000| Perform a bitwise XOR on the accumulator  |
+| cmp        | Yes   |0000000000| Compare accumulator with value  |
+| cpx        | Yes   |0000000000| Compare X register with value  |
+| cpy        | Yes   |0000000000| Compare Y register with value  |
+| bit        | Yes   |0000000000| Test bits in a memory location against the accumulator  |
+| inc        | Yes   |0000000000| Increment the value at the memory location by 1  |
+| inx        | No    |0000000000| Increment the X register by 1  |
+| iny        | No    |0000000000| Increment the Y register by 1  |
+| dec        | Yes   |0000000000| Decrement the value at the memory location by 1  |
+| dex        | No    |0000000000| Decrement the X register by 1  |
+| dey        | No    |0000000000| Decrement the Y register by 1  |
+| bcc        | Yes   |0000000000| Branch if carry is clear  |
+| bcs        | Yes   |0000000000| Branch if carry is set  |
+| beq        | Yes   |0000000000| Branch if zero flag is set  |
+| bmi        | Yes   |0000000000| Branch if negative flag is set  |
+| bne        | Yes   |0000000000| Branch if zero flag is clear  |
+| bpl        | Yes   |0000000000| Branch if negative flag is clear  |
+| bvc        | Yes   |0000000000| Branch if overflow flag is clear  |
+| bvs        | Yes   |0000000000| Branch if overflow flag is set  |
+| jmp        | Yes   |0000000000| Jump to a specified address  |
+| jsr        | Yes   |0000000000| Jump to a subroutine  |
+| rts        | No    |0000000000| Return from subroutine  |
+| pha        | No    |0000000000| Push accumulator onto the stack  |
+| php        | No    |0000000000| Push processor status onto the stack  |
+| pla        | No    |0000000000| Pull accumulator from the stack  |
+| plp        | No    |0000000000| Pull processor status from the stack  |
+| tax        | No    |0000000000| Transfer accumulator to X register  |
+| tay        | No    |0000000000| Transfer accumulator to Y register  |
+| txa        | No    |0000000000| Transfer X register to accumulator  |
+| tya        | No    |0000000000| Transfer Y register to accumulator  |
+| tsx        | No    |0000000000| Transfer stack pointer to X register  |
+| txs        | No    |0000000000| Transfer X register to stack pointer  |
+| rol        | No    |0000000000| Rotate bits left   |
+| ror        | No    |0000000000| Rotate bits right |
+| lsr        | No    |0000000000| Logical shift right  |
+| lsl        | No    |0000000000| Logical shift left  |
+| wrt        | Yes   |0000000000| Output directly |
+| wrb        | Yes   |0000000000| Output to the screen buffer |
+| dsb        | No    |0000000000| Display buffer |
+| clb        | No    |0000000000| Clear screen buffer |
+| cls        | No    |0000000000| Clear screen |
+| ssb        | No    |0000000000| Set screen to buffer |
 # Notes:
 - Some instructions may be broken or not function the same as the 6502
 - Some instructions are missing I have removed some instructions like `rti` (Return Interupt) becuase they no longer have purpose in the emulator, others just havn't been implemented yet
