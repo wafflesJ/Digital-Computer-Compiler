@@ -61,8 +61,8 @@ bne loop ;Continue to loop until X equals 12
 | inx        | No    |10000010 01000000| Increment the X register by 1  |
 | iny        | No    |10000010 00100000| Increment the Y register by 1  |
 | dec        | Yes   |01000010+address| Decrement the value at the memory location by 1  |
-| dex        | No    |01000010 01000000 followed by line| Decrement the X register by 1  |
-| dey        | No    |00000000 00100000 followed by line| Decrement the Y register by 1  |
+| dex        | No    |01000010 01000000 | Decrement the X register by 1  |
+| dey        | No    |00000000 00100000 | Decrement the Y register by 1  |
 | bcc        | Yes   |10001010 00010000 followed by line| Branch if carry is clear  |
 | bcs        | Yes   |00001010 00010000 followed by line| Branch if carry is set  |
 | beq        | Yes   |00101010 00010000 followed by line| Branch if zero flag is set  |
