@@ -151,7 +151,7 @@ function applySyntaxHighlighting(text) {
     return `<span class="number-bin">${match}</span>`;
   });
 
-  highlightedText = highlightedText.replace(/\b(nop|lda|ldx|ldy|sta|stx|sty|adc|sbc|and|ora|eor|cmp|cpx|cpy|bit|inc|inx|iny|dec|dex|dey|bcc|bcs|beq|bmi|bne|bpl|bvc|bvs|jmp|jsr|rts|pha|php|pla|plp|tax|tay|txa|tya|tsx|txs|wrt|wrb|dsb|clb|cls|lsr|lsl|ssb|ror|rol)\b/g, (match) => {
+  highlightedText = highlightedText.replace(syntaxRules[0].regex), (match) => {
     return `<span class="keyword">${match}</span>`;
   }).replace(/\.[a-zA-Z0-9_]+:/g, (match) => {
     return `<span class="label">${match}</span>`;
