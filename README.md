@@ -54,27 +54,27 @@ bne loop ;Continue to loop until X equals 12
 | adc        | Yes   |10010000+address| Add a value to the accumulator with the carry memory data |
 | sbc        | Yes   |11110000+data| Subtract a value from the accumulator with the carry const data|
 | sbc        | Yes   |0101+address| Subtract a value from the accumulator with the carry memory data|
-| cmp        | Yes   |00000000| Compare accumulator with value  |
-| cpx        | Yes   |00000000| Compare X register with value  |
-| cpy        | Yes   |00000000| Compare Y register with value  |
-| inc        | Yes   |00000000| Increment the value at the memory location by 1  |
-| inx        | No    |00000000| Increment the X register by 1  |
-| iny        | No    |00000000| Increment the Y register by 1  |
-| dec        | Yes   |00000000| Decrement the value at the memory location by 1  |
-| dex        | No    |00000000| Decrement the X register by 1  |
-| dey        | No    |00000000| Decrement the Y register by 1  |
-| bcc        | Yes   |00000000| Branch if carry is clear  |
-| bcs        | Yes   |00000000| Branch if carry is set  |
-| beq        | Yes   |00000000| Branch if zero flag is set  |
-| bmi        | Yes   |00000000| Branch if negative flag is set  |
-| bne        | Yes   |00000000| Branch if zero flag is clear  |
-| bpl        | Yes   |00000000| Branch if negative flag is clear  |
-| jmp        | Yes   |00000000| Jump to a specified address  |
-| jsr        | Yes   |00000000| Jump to a subroutine  |
-| rts        | No    |00000000| Return from subroutine  |
-| pha        | No    |00000000| Push accumulator onto the stack  |
-| pla        | No    |00000000| Pull accumulator from the stack  |
-| tax        | No    |00000000| Transfer accumulator to X register  |
+| cmp        | Yes   |11000110 00000000 followed by cmp value (+00000001 if mem)| Compare accumulator with value  |
+| cpx        | Yes   |00100110 00000000 followed by cmp value (+00000001 if mem)| Compare X register with value  |
+| cpy        | Yes   |10100110 00000000 followed by cmp value (+00000001 if mem)| Compare Y register with value  |
+| inc        | Yes   |10000000+address| Increment the value at the memory location by 1  |
+| inx        | No    |10000010 01000000| Increment the X register by 1  |
+| iny        | No    |10000010 00100000| Increment the Y register by 1  |
+| dec        | Yes   |01000010+address| Decrement the value at the memory location by 1  |
+| dex        | No    |01000010 01000000 followed by line| Decrement the X register by 1  |
+| dey        | No    |00000000 00100000 followed by line| Decrement the Y register by 1  |
+| bcc        | Yes   |10001010 00010000 followed by line| Branch if carry is clear  |
+| bcs        | Yes   |00001010 00010000 followed by line| Branch if carry is set  |
+| beq        | Yes   |00101010 00010000 followed by line| Branch if zero flag is set  |
+| bmi        | Yes   |11001010 00010000 followed by line| Branch if negative flag is set  |
+| bne        | Yes   |10101010 00010000 followed by line| Branch if zero flag is clear  |
+| bpl        | Yes   |11001010 00010000 followed by line| Branch if negative flag is clear  |
+| jmp        | Yes   |00000010 00010000 followed by line| Jump to a specified address  |
+| jsr        | Yes   |00000010 00001000 followed by current line then jmp| Jump to a subroutine  |
+| rts        | No    |00000010 00010000 followed by 00000000 00001000| Return from subroutine  |
+| pha        | No    |01000010 00001000| Push accumulator onto the stack  |
+| pla        | No    |01100010 00001000| Pull accumulator from the stack  |
+| tax        | No    |11000010 01000000| Transfer accumulator to X register  |
 | tay        | No    |00000000| Transfer accumulator to Y register  |
 | txa        | No    |00000000| Transfer X register to accumulator  |
 | tya        | No    |00000000| Transfer Y register to accumulator  |
