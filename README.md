@@ -40,7 +40,7 @@ bne loop ;Continue to loop until X equals 12
 - 0xFC though 0xFF store current key inputs in ASCII
 # Full Instruction Set:
 | Instruction | Takes Value |Bits| Description |
-|------------|-------|-------------|
+|------------|-------|--------|-------------|
 | lda        | Yes   |11010000+data| Load a value into the accumulator from const |
 | lda        | Yes   |01100000+address| Load a value into the accumulator from address |
 | ldx        | Yes   |00110000+data| Load a value into X from const |
