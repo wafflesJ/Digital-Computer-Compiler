@@ -1,12 +1,11 @@
-# 6502-Emulator
-An emulator for a modified 6502 assembly with a build in compiler and editor.
-Despite having to compile code before running this 6502 Emulator in still interpreted, the compiler takes the raw text input and converts it into data for the interpreter.  
-The link to the emulator is [here](https://wafflesj.github.io/6502-Emulator/)
+# Digital Logic Simulation Computer Compilier 
+An compilier for a computer built in Sebastian Lague's digital logic simulation with a build in editor.
+This is a fork of my origanal [6502 Emulator](https://github.com/wafflesJ/6502-Emulator) but modified to output binary for my computer inside of the simulation. I plan to update the emulator to work with this version but as this is still in developement the emulator is currently disabled.
+The link to the compilier is [here](https://wafflesj.github.io/Digital-Computer-Compiler/)
 
-- 64K Memory Addresses
+- 256 Bytes Memory
 - A, X and Y Registers
-- 52 OpCodes
-- Text Output
+- Compiled Binary output
   
 **NOTE: All codes are saved to a universal database, please do not delete or ruin others code**  
 # Instructions and Syntax:
@@ -75,12 +74,10 @@ bne loop ;Continue to loop until X equals 12
 | pha        | No    |01000010 00001000| Push accumulator onto the stack  |
 | pla        | No    |01100010 00001000| Pull accumulator from the stack  |
 | tax        | No    |11000010 01000000| Transfer accumulator to X register  |
-| tay        | No    |00000000| Transfer accumulator to Y register  |
-| txa        | No    |00000000| Transfer X register to accumulator  |
-| tya        | No    |00000000| Transfer Y register to accumulator  |
-| wrt        | Yes   |00000000| Output directly |
+| tay        | No    |11000010 00100000| Transfer accumulator to Y register  |
+| txa        | No    |00100010 10000000| Transfer X register to accumulator  |
+| tya        | No    |10100010 10000000| Transfer Y register to accumulator  |
+| wrt        | Yes   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly |
 # Notes:
-- Some instructions may be broken or not function the same as the 6502
-- Some instructions are missing I have removed some instructions like `rti` (Return Interupt) becuase they no longer have purpose in the emulator, others just havn't been implemented yet
-- Registers and memory can hold values far greater than 256(Max byte size) but byte based instructions treat the values like a byte rotates are mostly effected
-- The clock speed may be set to any value but values over 10 Million may cause your browser to severly lag or crash, becuase of this a warning is givin every time a value beyond this is set
+- Some instructions have been removed such as interupts or bitwise operations
+- There are lots of operations possible that do not have an instruction for them such as pushing data directly to the stack `00000010 0000100`
