@@ -70,7 +70,8 @@ bne loop ;Continue to loop until X equals 12
 | tay        | No    |11000010 00100000| Transfer accumulator to Y register  |
 | txa        | No    |00100010 10000000| Transfer X register to accumulator  |
 | tya        | No    |10100010 10000000| Transfer Y register to accumulator  |
-| wrt        | Yes   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly |
+| wrt        | Yes   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly (WIP for compilier)|
+| dsp        | Yes   |00000001+location followed by colour | Display colour to RGB screen | 
 # Notes:
 - Some instructions have been removed such as interupts or bitwise operations
 - There are lots of operations possible that do not have an instruction for them such as pushing data directly to the stack without the A register `00000010 0000100`
