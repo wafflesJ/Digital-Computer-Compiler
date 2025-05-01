@@ -80,4 +80,4 @@ bne loop ;Continue to loop until X equals 12
 | wrt        | Yes   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly |
 # Notes:
 - Some instructions have been removed such as interupts or bitwise operations
-- There are lots of operations possible that do not have an instruction for them such as pushing data directly to the stack `00000010 0000100`
+- There are lots of operations possible that do not have an instruction for them such as pushing data directly to the stack without the A register `00000010 0000100`
