@@ -18,13 +18,6 @@ lda $0x50    ;Loads 80 into A register
 ldx $4       ;Loads 4 into X register
 sta #$0x2 X  ;Stores A(50) at memory address 6, 4+X(2)
 ```
-**Other Syntax:**  
-To load data directly into memory on load type the `$` prefix followed by a memory address, `=` and then you data, separated by spaces. This will load the data into memory starting at the specified address, each value or charactor(for strings) will be loaded into a separate location  
-**Example Code:**  
-```
-$2 = 5 8 "Hi"
-```
-The value 5 is stored at address 2, 8 at address 3, 72(H in ASCII) at 4, and 105(i in ASCII) at 5  
 **Labels:**  
 Labels are writen startign with `.` , ending with `:` and are one world. Jump Instructions can used them as a replacement for the line number. Along with values direcly put into memory labels do not get executed and therefor do not count as a line when giving a jump instruction a line value. Jump instructions include: `jmp` `beq` `bne` `bcc` `bcs` `bmi` `mne` `bvc` `bvc` and `jsr`.  
 **Example Code:**  
