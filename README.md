@@ -46,9 +46,9 @@ bne loop ;Continue to loop until X equals 12
 | adc        | Yes   |10010000+address| Add a value to the accumulator with the carry memory data |
 | sbc        | Yes   |11110000+data| Subtract a value from the accumulator with the carry const data|
 | sbc        | Yes   |0101+address| Subtract a value from the accumulator with the carry memory data|
-| cmp        | Yes   |11000110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value (+00000001 if mem)| Compare accumulator with value  |
-| cpx        | Yes   |00100110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value (+00000001 if mem)| Compare X register with value  |
-| cpy        | Yes   |10100110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value (+00000001 if mem)| Compare Y register with value  |
+| cmp        | Yes   |11000110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value | Compare accumulator with value  |
+| cpx        | Yes   |00100110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value | Compare X register with value  |
+| cpy        | Yes   |10100110 00000000 followed by 00000000 00000000 followed by 00000110 00000000 followed by cmp value | Compare Y register with value  |
 | inc        | Yes   |10000000+address| Increment the value at the memory location by 1  |
 | inx        | No    |10000010 01000000| Increment the X register by 1  |
 | iny        | No    |10000010 00100000| Increment the Y register by 1  |
