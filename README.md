@@ -64,8 +64,8 @@ bne loop ;Continue to loop until X equals 12
 | jmp        | Yes   |00000010 00010000 followed by line| Jump to a specified address  |
 | jsr        | Yes   |00000010 00001000 followed by current line then jmp| Jump to a subroutine  |
 | rts        | No    |00000010 00010000 followed by 00000000 00001000| Return from subroutine  |
-| pha        | No    |01000010 00001000| Push accumulator onto the stack  |
-| pla        | No    |01100010 00001000| Pull accumulator from the stack  |
+| pha        | No    |11000010 00001000 followed by 00000000 00000000| Push accumulator onto the stack  |
+| pla        | No    |01100010 00000000 followed by 00000000 00001000| Pull accumulator from the stack  |
 | tax        | No    |11000010 01000000| Transfer accumulator to X register  |
 | tay        | No    |11000010 00100000| Transfer accumulator to Y register  |
 | txa        | No    |00100010 10000000| Transfer X register to accumulator  |
