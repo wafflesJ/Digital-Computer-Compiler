@@ -233,7 +233,7 @@
   border-radius: 50%;
   padding: 2px; 
   cursor: pointer;
-  background-color: #42ac55;
+  background-color: #a9a9a9;/*#42ac55;*/
   height: 45px; 
   width: 45px; 
 }
@@ -279,7 +279,17 @@
   color: black;
   z-index: 5;
 }
-
+.button-copy {
+  margin-right: 8px;
+  position: relative;
+  top: 103%;
+  border-radius: 50%;
+  padding: 6px; 
+  cursor: pointer;
+  background-color: #777777;/*#42ac55;*/
+  height: 45px; 
+  width: 45px; 
+}
 .buttonHolder {
   display: flex;
   align-items: center;
@@ -294,6 +304,12 @@
   position: relative;
   width: 100%;
   height: 100%; 
+  object-fit: contain; 
+}
+.imgC {
+  position: relative;
+  width: 80%;
+  height: 80%; 
   object-fit: contain; 
 }
 .imgAlt {
