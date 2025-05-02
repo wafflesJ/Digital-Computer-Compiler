@@ -2,6 +2,7 @@ export const Instuctions = [];
 let count=0;
 let labels = new Map();
 export let MemSet = [];
+const Output = document.getElementById("output");
 
 export function Compile() {
   count=0;
@@ -27,13 +28,113 @@ export function Compile() {
     if(words!=''&&words!=null) {
       if(!(words[0].startsWith('.')||words[0].startsWith('$'))) {
         if (actions.has(words[0])) {
-          actions.get(words[0])(words[1],words[2]);
-        }
+          actions.get(words[0])(words[1],words[2],words[3]);
+        } else {
+          Output.innerHTML="Compilation error: '"+words[0]+"' does not exist.";
+          return;
+      }
       } 
     }
     
   }
+  MakeBinary();
 }
+function MakeBinary() {
+  let binary="";
+  let line=0;
+  let lineNums=[];
+  for (let i = 0; i < Instuctions.length; i++) {
+    line+=binaryCodes[Instuctions[i].op].inc;
+    lineNums.push(line);
+  }
+  line=0;
+  for (let i = 0; i < Instuctions.length; i++) {
+    let code =Instuctions[i]
+    if(code.memory) {
+      if(!binaryCodes[code.op].address ){
+        Output.innerHTML="Compilation error: '"+symbols[code.op]+"' does not accept addresses, only numbers.";
+        return;
+      } else 
+        binary+=binaryCodes[code.op].address;
+    } else {
+      if(!binaryCodes[code.op].base){
+        Output.innerHTML="Compilation error: '"+symbols[code.op]+"' does not accept numbers, only addresses.";
+        return;
+      } else
+      binary+=binaryCodes[code.op].base;
+    }
+      if(code.op==24) {//jsr
+        binary+=line.toString(2).padStart(8, '0')+" 00000000\n";
+        binary+="00000010 00010000\n"
+      }
+      
+      if(code.label) {
+        binary+=lineNums[code.value-1].toString(2).padStart(8, '0');
+      } else if(code.value)
+        binary+=code.value.toString(2).padStart(8, '0');
+      if(binaryCodes[code.op].address&&(code.memory&&!code.col)) {//add address data 
+          binary+="\n00000000 0000";
+          let bits = 0b0000;
+          if(binaryCodes[code.op].base) {//if both
+            bits|=0b0001; 
+            line++;
+          }
+          if(code.ofset=="X") bits|=0b0100;
+          if(code.ofset=="Y") bits|=0b0010;
+          binary+=bits.toString(2).padStart(4, '0');
+      }
+      if(code.op==33) {//dsp
+        binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
+        binary+=" "+(code.col&0xF00>>8).toString(2).padStart(4, '0');
+      }
+      if(code.op==32) {//wrt
+        binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
+        binary+=" 00000000";
+      }
+      binary+=binaryCodes[code.op].follow;
+      line+=binaryCodes[code.op].inc;
+  }
+  Output.innerHTML=binary;
+}
+
+const binaryCodes = [
+  {base:"11010000 ",address:"01100000 ",follow:"\n",inc:1},//lda
+  {base:"00110000 ",address:"11100000 ",follow:"\n",inc:1},//ldx
+  {base:"10110000 ",address:"00010000 ",follow:"\n",inc:1},//ldy
+  {address:"11000000 ",follow:"\n",inc:2},//sta
+  {address:"00100000 ",follow:"\n",inc:2},//stx
+  {address:"10100000 ",follow:"\n",inc:2},//sty
+  {base:"01110000 ",address:"10010000 ",follow:"\n",inc:1},//adc
+  {base:"11110000 ",address:"01010000 ",follow:"\n",inc:1},//sbc
+  {base:"11000110 00000000\n00000000 00000000\n00000110 00000000\n",follow:" 00000000\n",inc:4},//cmp
+  {base:"00100110 00000000\n00000000 00000000\n00000110 00000000\n",follow:" 00000000\n",inc:4},//cpx
+  {base:"10100110 00000000\n00000000 00000000\n00000110 00000000\n",follow:" 00000000\n",inc:4},//cpy
+  {address:"10000000 ",follow:"\n",inc:2},//inc
+  {base:"10000010 01000000\n00000000 00000000\n",follow:"\n",inc:2},//inx
+  {base:"10000010 00100000\n00000000 00000000\n",follow:"\n",inc:2},//iny
+  {address:"01000010 ",follow:"\n",inc:2},//dec
+  {base:"01000010 01000000\n00000000 00000000\n",follow:"\n",inc:2},//dex
+  {base:"01000000 00100000\n00000000 00000000\n",follow:"\n",inc:2},//dey
+  {base:"10001010 00010000\n",follow:" 00000000\n",inc:2},//bcc
+  {base:"00001010 00010000\n",follow:" 00000000\n",inc:2},//bcs
+  {base:"00101010 00010000\n",follow:" 00000000\n",inc:2},//beq
+  {base:"11001010 00010000\n",follow:" 00000000\n",inc:2},//bmi
+  {base:"10101010 00010000\n",follow:" 00000000\n",inc:2},//bne
+  {base:"11001010 00010000\n",follow:" 00000000\n",inc:2},//bpl
+  {base:"00000010 00010000\n",follow:" 00000000\n",inc:2},//jmp
+  {base:"00000010 00001000\n",follow:" 00000000\n",inc:4},//jsr
+  {base:"00000010 00010000\n",follow:"00000000 00001000\n",inc:2},//rts
+  {base:"11000010 00001000\n",follow:"00000000 00000000\n",inc:2},//pha
+  {base:"01100010 00000000\n",follow:"00000000 00001000\n",inc:2},//pla
+  {base:"11000010 01000000\n",follow:"00000000 00000000\n",inc:2},//tax
+  {base:"11000010 00100000\n",follow:"00000000 00000000\n",inc:2},//tay
+  {base:"00100010 10000000\n",follow:"00000000 00000000\n",inc:2},//txa
+  {base:"10100010 10000000\n",follow:"00000000 00000000\n",inc:2},//tya
+  {address:"00000000 ",follow:"\n",inc:2},//wrt WIP
+  {address:"00000001 ",follow:"0000\n",inc:2}//dsp
+
+
+];
 
 
 const valueRegex = [
@@ -85,7 +186,12 @@ function convertMEM(values) {
   }
   return 'Unknown';
 }
-
+function LabelConvert(value) {
+  if(labels.has(value)) {
+    return (labels.get(value) - 1).toString();;
+  } else 
+  return value;
+}
 
 function convert(value,valueB) {
   if (value==undefined) return 0;
@@ -124,75 +230,77 @@ function convert(value,valueB) {
 
 function Label(value) {
   if(labels.has(value)) {
-    return (labels.get(value) - 1).toString();
+    return (labels.get(value));
   } else 
-  return convert(value).value-1;
+  return convert(value).value;
 }
-function LabelConvert(value) {
-  if(labels.has(value)) {
-    return (labels.get(value) - 1);
-  } else 
-  return value;
+
+function colour(value) {
+  value=value.slice(1);
+  for (let rule of valueRegex) {
+    const match = value.match(rule.regex);
+    
+    if (match) {
+      console.log(value);
+      if (rule.type === 'number-hex') {
+        return parseInt(value, 16); // Parse hex to decimal
+      } else if (rule.type === 'number-dec') {
+        return  parseInt(value, 10); // Parse decimal
+      } else if (rule.type === 'number-bin') {
+        return parseInt(value.slice(2), 2); // Parse binary to decimal
+      }
+    }
+  }
+  return 0;
 }
+
+const symbols = [
+  'lda', 'ldx', 'ldy', 'sta', 'stx', 'sty',
+  'adc', 'sbc', 'cmp', 'cpx', 'cpy', 'inc',
+  'inx', 'iny', 'dec', 'dex', 'dey', 'bcc',
+  'bcs', 'beq', 'bmi', 'bne', 'bpl', 'jmp',
+  'jsr', 'rts', 'pha', 'pla', 'tax', 'tay',
+  'txa', 'tya', 'wrt', 'dsp'
+];
+
 const actions = new Map([
-  ['nop', () => Instuctions.push({op: 0})], // no op: Does nothing (NOP)
-  ['lda', (value,valueB) => Instuctions.push({op: 1, ...convert(LabelConvert(value),valueB)})], // lda: Load a value into the accumulator (LDA)
-  ['ldx', (value,valueB) => Instuctions.push({op: 2, ...convert(LabelConvert(value),valueB)})], // ldx: Load a value into the X register (LDX)
-  ['ldy', (value,valueB) => Instuctions.push({op: 3, ...convert(LabelConvert(value),valueB)})], // ldy: Load a value into the Y register (LDY)
-  ['sta', (value,valueB) => Instuctions.push({op: 4, ...convert(value,valueB)})], // sta: Store the accumulator value in memory (STA)
-  ['stx', (value,valueB) => Instuctions.push({op: 5, ...convert(value,valueB)})], // stx: Store the X register value in memory (STX)
-  ['sty', (value,valueB) => Instuctions.push({op: 6, ...convert(value,valueB)})], // sty: Store the Y register value in memory (STY)
-  ['adc', (value,valueB) => Instuctions.push({op: 7, ...convert(value,valueB)})], // adc: Add a value to the accumulator with the carry (ADC)
-  ['sbc', (value,valueB) => Instuctions.push({op: 8, ...convert(value,valueB)})], // sbc: Subtract a value from the accumulator with the carry (SBC)
-  ['and', (value,valueB) => Instuctions.push({op: 9, ...convert(value,valueB)})], // and: Perform a bitwise AND on the accumulator (AND)
-  ['ora', (value,valueB) => Instuctions.push({op: 10, ...convert(value,valueB)})], // ora: Perform a bitwise OR on the accumulator (ORA)
-  ['eor', (value,valueB) => Instuctions.push({op: 11, ...convert(value,valueB)})], // eor: Perform a bitwise XOR on the accumulator (EOR)
-  ['cmp', (value,valueB) => Instuctions.push({op: 12, ...convert(value,valueB)})], // cmp: Compare accumulator with value (CMP)
-  ['cpx', (value,valueB) => Instuctions.push({op: 13, ...convert(value,valueB)})], // cpx: Compare X register with value (CPX)
-  ['cpy', (value,valueB) => Instuctions.push({op: 14, ...convert(value,valueB)})], // cpy: Compare Y register with value (CPY)
-  ['bit', (value,valueB) => Instuctions.push({op: 15, ...convert(value,valueB)})], // bit: Test bits in a memory location against the accumulator (BIT)
-  ['inc', (value,valueB) => Instuctions.push({op: 16, ...convert(value,valueB)})], // inc: Increment the value at the memory location by 1 (INC)
-  ['inx', () => Instuctions.push({op: 17})], // inx: Increment the X register by 1 (INX)
-  ['iny', () => Instuctions.push({op: 18})], // iny: Increment the Y register by 1 (INY)
-  ['dec', (value,valueB) => Instuctions.push({op: 19, ...convert(value,valueB)})], // dec: Decrement the value at the memory location by 1 (DEC)
-  ['dex', () => Instuctions.push({op: 20})], // dex: Decrement the X register by 1 (DEX)
-  ['dey', () => Instuctions.push({op: 21})], // dey: Decrement the Y register by 1 (DEY)
-  ['bcc', (value) => Instuctions.push({op: 22, value: Label(value)})], // bcc: Branch if carry is clear (BCC)
-  ['bcs', (value) => Instuctions.push({op: 23, value: Label(value)})], // bcs: Branch if carry is set (BCS)
-  ['beq', (value) => Instuctions.push({op: 24, value: Label(value)})], // beq: Branch if zero flag is set (BEQ)
-  ['bmi', (value) => Instuctions.push({op: 25, value: Label(value)})], // bmi: Branch if negative flag is set (BMI)
-  ['bne', (value) => Instuctions.push({op: 26, value: Label(value)})], // bne: Branch if zero flag is clear (BNE)
-  ['bpl', (value) => Instuctions.push({op: 27, value: Label(value)})], // bpl: Branch if negative flag is clear (BPL)
-  ['bvc', (value) => Instuctions.push({op: 28, value: Label(value)})], // bvc: Branch if overflow flag is clear (BVC)
-  ['bvs', (value) => Instuctions.push({op: 29, value: Label(value)})], // bvs: Branch if overflow flag is set (BVS)
-  ['jmp', (value) => Instuctions.push({op: 30, value: Label(value)})], // jmp: Jump to a specified address (JMP)
-  ['jsr', (value) => Instuctions.push({op: 31, value: Label(value)})], // jsr: Jump to a subroutine (JSR)
-  ['rts', () => Instuctions.push({op: 32})], // rts: Return from subroutine (RTS)
-  ['pha', () => Instuctions.push({op: 33})], // pha: Push accumulator onto the stack (PHA)
-  ['php', () => Instuctions.push({op: 34})], // php: Push processor status onto the stack (PHP)
-  ['pla', () => Instuctions.push({op: 35})], // pla: Pull accumulator from the stack (PLA)
-  ['plp', () => Instuctions.push({op: 36})], // plp: Pull processor status from the stack (PLP)
-  ['tax', () => Instuctions.push({op: 37})], // tax: Transfer accumulator to X register (TAX)
-  ['tay', () => Instuctions.push({op: 38})], // tay: Transfer accumulator to Y register (TAY)
-  ['txa', () => Instuctions.push({op: 39})], // txa: Transfer X register to accumulator (TXA)
-  ['tya', () => Instuctions.push({op: 40})], // tya: Transfer Y register to accumulator (TYA)
-  ['tsx', () => Instuctions.push({op: 41})], // tsx: Transfer stack pointer to X register (TSX)
-  ['txs', () => Instuctions.push({op: 42})], // txs: Transfer X register to stack pointer (TXS)
-  ['rol', () => Instuctions.push({op: 49})], // rol: rotate left
-  ['ror', () => Instuctions.push({op: 50})], // rol: rotate right
-  ['lsl', () => Instuctions.push({op: 51})], // rol: logic shift right
-  ['lsr', () => Instuctions.push({op: 52})], // rol: logic shift left
-  //end of 6502, new
-  ['wrt', (value,valueB) => Instuctions.push({op: 43, ...convert(value,valueB)})], //output direct
-  ['wrb', (value,valueB) => Instuctions.push({op: 44, ...convert(value,valueB)})], //output buffer
-  ['dsb', () => Instuctions.push({op: 45})], //display buffer
-  ['clb', () => Instuctions.push({op: 46})], //clear screen buffer
-  ['cls', () => Instuctions.push({op: 47})], //clear screen
-  ['ssb', () => Instuctions.push({op: 48})], //set screen buffer
-
-
+  ['lda', (value,valueB) => Instuctions.push({op: 0, ...convert(LabelConvert(value),valueB)})],
+  ['ldx', (value,valueB) => Instuctions.push({op: 1, ...convert(value,valueB)})],
+  ['ldy', (value,valueB) => Instuctions.push({op: 2, ...convert(value,valueB)})],
+  ['sta', (value,valueB) => Instuctions.push({op: 3, ...convert(value,valueB)})],
+  ['stx', (value,valueB) => Instuctions.push({op: 4, ...convert(value,valueB)})],
+  ['sty', (value,valueB) => Instuctions.push({op: 5, ...convert(value,valueB)})],
+  ['adc', (value,valueB) => Instuctions.push({op: 6, ...convert(value,valueB)})],
+  ['sbc', (value,valueB) => Instuctions.push({op: 7, ...convert(value,valueB)})],
+  ['cmp', (value,valueB) => Instuctions.push({op: 8, ...convert(value,valueB)})],
+  ['cpx', (value,valueB) => Instuctions.push({op: 9, ...convert(value,valueB)})],
+  ['cpy', (value,valueB) => Instuctions.push({op: 10, ...convert(value,valueB)})],
+  ['inc', (value,valueB) => Instuctions.push({op: 11, ...convert(value,valueB)})],
+  ['inx', () => Instuctions.push({op: 12})],
+  ['iny', () => Instuctions.push({op: 13})],
+  ['dec', (value,valueB) => Instuctions.push({op: 14, ...convert(value,valueB)})],
+  ['dex', () => Instuctions.push({op: 15})],
+  ['dey', () => Instuctions.push({op: 16})],
+  ['bcc', (value) => Instuctions.push({op: 17, value: Label(value),label:true})],
+  ['bcs', (value) => Instuctions.push({op: 18, value: Label(value),label:true})],
+  ['beq', (value) => Instuctions.push({op: 19, value: Label(value),label:true})],
+  ['bmi', (value) => Instuctions.push({op: 20, value: Label(value),label:true})],
+  ['bne', (value) => Instuctions.push({op: 21, value: Label(value),label:true})],
+  ['bpl', (value) => Instuctions.push({op: 22, value: Label(value),label:true})],
+  ['jmp', (value) => Instuctions.push({op: 23, value: Label(value),label:true})],
+  ['jsr', (value) => Instuctions.push({op: 24, value: Label(value),label:true})],
+  ['rts', () => Instuctions.push({op: 25})],
+  ['pha', () => Instuctions.push({op: 26})],
+  ['pla', () => Instuctions.push({op: 27})],
+  ['tax', () => Instuctions.push({op: 28})],
+  ['tay', () => Instuctions.push({op: 29})],
+  ['txa', () => Instuctions.push({op: 30})],
+  ['tya', () => Instuctions.push({op: 31})],
+  ['wrt', (value,valueB,valueC) => Instuctions.push({op: 32, ...convert(valueB,valueC), col:colour(value)})],
+  ['dsp', (value,valueB,valueC) => Instuctions.push({op: 33, ...convert(valueB,valueC), col:colour(value)})]
 ]);
 
+ 
 
 
 document.getElementById("compile").addEventListener("click", Compile);
