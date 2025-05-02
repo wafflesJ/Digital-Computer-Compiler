@@ -66,10 +66,10 @@ bne loop ;Continue to loop until X equals 12
 | rts        | No    |00000010 00010000 followed by 00000000 00001000| Return from subroutine  |
 | pha        | No    |11000010 00001000 followed by 00000000 00000000| Push accumulator onto the stack  |
 | pla        | No    |01100010 00000000 followed by 00000000 00001000| Pull accumulator from the stack  |
-| tax        | No    |11000010 01000000| Transfer accumulator to X register  |
-| tay        | No    |11000010 00100000| Transfer accumulator to Y register  |
-| txa        | No    |00100010 10000000| Transfer X register to accumulator  |
-| tya        | No    |10100010 10000000| Transfer Y register to accumulator  |
+| tax        | No    |11000010 01000000 followed by 00000000 00000000| Transfer accumulator to X register  |
+| tay        | No    |11000010 00100000 followed by 00000000 00000000| Transfer accumulator to Y register  |
+| txa        | No    |00100010 10000000 followed by 00000000 00000000| Transfer X register to accumulator  |
+| tya        | No    |10100010 10000000 followed by 00000000 00000000| Transfer Y register to accumulator  |
 | wrt        | Yes   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly (WIP for compilier)|
 | dsp        | Yes   |00000001+location followed by colour | Display colour to RGB screen | 
 # Notes:
