@@ -69,20 +69,9 @@ function MakeBinary() {
       }
       
       if(code.label) {
-        binary+=lineNums[code.value-1].toString(2).padStart(8, '0');
-      } else if(code.value)
-        binary+=code.value.toString(2).padStart(8, '0');
-      if(binaryCodes[code.op].address&&(code.memory&&!code.col)) {//add address data 
-          binary+="\n00000000 0000";
-          let bits = 0b0000;
-          if(binaryCodes[code.op].base) {//if both
-            bits|=0b0001; 
-            line++;
-          }
-          if(code.ofset=="X") bits|=0b0100;
-          if(code.ofset=="Y") bits|=0b0010;
-          binary+=bits.toString(2).padStart(4, '0');
-      }
+        binary+=lineNums[code.value-1].toString(2).padStart(8, "0");
+      } else if(code.value!=undefined)
+        binary+=code.value.toString(2).padStart(8, "0");
       if(code.op==33) {//dsp
         binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
         binary+=" "+(code.col&0xF00>>8).toString(2).padStart(4, '0');
@@ -91,6 +80,18 @@ function MakeBinary() {
         binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
         binary+=" 00000000";
       }
+      if(binaryCodes[code.op].address&&code.memory) {//add address data 
+          if(code.col==undefined)binary+="\n00000000 0000";
+          let bits = 0b0000;
+          if(binaryCodes[code.op].base&&code.col==undefined) {//if both
+            bits|=0b0001; 
+            line++;
+          }
+          if(code.ofset=="X") bits|=0b0100;
+          if(code.ofset=="Y") bits|=0b0010;
+          binary+=bits.toString(2).padStart(4, '0');
+      }
+      
       binary+=binaryCodes[code.op].follow;
       line+=binaryCodes[code.op].inc;
   }
@@ -110,11 +111,11 @@ const binaryCodes = [
   {base:"00100110 00000000\n00000000 00000000\n00000110 00000000\n",follow:" 00000000\n",inc:4},//cpx
   {base:"10100110 00000000\n00000000 00000000\n00000110 00000000\n",follow:" 00000000\n",inc:4},//cpy
   {address:"10000000 ",follow:"\n",inc:2},//inc
-  {base:"10000010 01000000\n00000000 00000000\n",follow:"\n",inc:2},//inx
-  {base:"10000010 00100000\n00000000 00000000\n",follow:"\n",inc:2},//iny
+  {base:"10000010 01000000\n00000000 00000000",follow:"\n",inc:2},//inx
+  {base:"10000010 00100000\n00000000 00000000",follow:"\n",inc:2},//iny
   {address:"01000010 ",follow:"\n",inc:2},//dec
-  {base:"01000010 01000000\n00000000 00000000\n",follow:"\n",inc:2},//dex
-  {base:"01000000 00100000\n00000000 00000000\n",follow:"\n",inc:2},//dey
+  {base:"01000010 01000000\n00000000 00000000",follow:"\n",inc:2},//dex
+  {base:"01000000 00100000\n00000000 00000000",follow:"\n",inc:2},//dey
   {base:"10001010 00010000\n",follow:" 00000000\n",inc:2},//bcc
   {base:"00001010 00010000\n",follow:" 00000000\n",inc:2},//bcs
   {base:"00101010 00010000\n",follow:" 00000000\n",inc:2},//beq
@@ -130,8 +131,8 @@ const binaryCodes = [
   {base:"11000010 00100000\n",follow:"00000000 00000000\n",inc:2},//tay
   {base:"00100010 10000000\n",follow:"00000000 00000000\n",inc:2},//txa
   {base:"10100010 10000000\n",follow:"00000000 00000000\n",inc:2},//tya
-  {address:"00000000 ",follow:"\n",inc:2},//wrt WIP
-  {address:"00000001 ",follow:"0000\n",inc:2}//dsp
+  {base:"00000000 ",address:"00000000 ",follow:"\n",inc:2},//wrt WIP
+  {base:"00000000 ",address:"00000001 ",follow:"\n",inc:2}//dsp
 
 
 ];
@@ -241,7 +242,6 @@ function colour(value) {
     const match = value.match(rule.regex);
     
     if (match) {
-      console.log(value);
       if (rule.type === 'number-hex') {
         return parseInt(value, 16); // Parse hex to decimal
       } else if (rule.type === 'number-dec') {
