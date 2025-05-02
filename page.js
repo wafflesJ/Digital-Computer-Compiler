@@ -163,7 +163,7 @@ function applySyntaxHighlighting(text) {
 
 const syntaxRules = [
   
-  /\b(lda|ldx|ldy|sta|stx|sty|adc|sbc|cmp|cpx|cpy|inc|inx|iny|dec|dex|dey|bcc|bcs|beq|bmi|bne|bpl|jmp|jsr|rts|pha|pla|tax|tay|txa|tya|wrt|dsp)\b/g,
+  /\b(lda|ldx|ldy|sta|stx|sty|adc|sbc|cmp|cpx|cpy|inc|inx|iny|dec|dex|dey|bcc|bcs|beq|bmi|bne|bpl|jmp|jsr|rts|pha|pla|tax|tay|txa|tya|wrt|dsp|key)\b/g,
   /;[^\n]*|".*?"|'.*?'|`.*?`/g,
   /#?\$\d+(\.\d+)?\b/g,   // Match numbers (decimal, hex, binary)
   /#?\$0x[0-9a-fA-F]+\b/g,  // Match hexadecimal numbers
