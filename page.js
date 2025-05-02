@@ -235,6 +235,12 @@ const syntaxRules = [
       } 
      input.value = formatValue(speed);
     });
-        
-        
+    function copyCode() {
+      const text = Output.innerText; 
+      navigator.clipboard.writeText(text).then().catch(err => {
+        alert("Failed to copy: " + err);
+      });
+    }
+    document.getElementById("copy").addEventListener("click", copyCode);
+
     //*/
