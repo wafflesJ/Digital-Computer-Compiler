@@ -76,7 +76,7 @@ bne loop ;Continue to loop until X equals 12
 |------------|-------|----------|----------|
 | wrt        | Data + Adrs   |000000+2 bit location+8 bit address followed by 12 bits of data| Output directly (WIP for compilier)|
 | dsp        | Col + Pxl   |00000001+location followed by colour | Display colour to RGB screen | 
-| key        | No | 01100010 00000100 followed by 00000000 00000000 |Loads the key pressed into A, 0 no key A=1 B=2 ect. Z=26|
+| key        | No | 01100010 00000110 followed by 00000000 00000000 |Loads the key pressed into A, 0 no key A=1 B=2 ect. Z=26|
 # Notes:
 - Some instructions have been removed such as interupts or bitwise operations
 - There are lots of operations possible that do not have an instruction for them such as pushing data directly to the stack without the A register `00000010 0000100`
