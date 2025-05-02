@@ -3,14 +3,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase
 import { getDatabase, ref, set, get, child, push } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";  // <-- Add push here
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDei-h3yGZiT5CB3r7TZh0hGxcjfNj5bWM",
-  authDomain: "assembly-3cd3e.firebaseapp.com",
-  databaseURL: "https://assembly-3cd3e-default-rtdb.firebaseio.com",
-  projectId: "assembly-3cd3e",
-  storageBucket: "assembly-3cd3e.firebasestorage.app",
-  messagingSenderId: "334002690864",
-  appId: "1:334002690864:web:1fa2a7fd0080b1b72406f5"
-};
+    apiKey: "AIzaSyAR-seX20iq8NXNBKUTF9v8LReBDKIvuSg",
+    authDomain: "digitalcomputer-f1044.firebaseapp.com",
+    databaseURL: "https://digitalcomputer-f1044-default-rtdb.firebaseio.com",
+    projectId: "digitalcomputer-f1044",
+    storageBucket: "digitalcomputer-f1044.firebasestorage.app",
+    messagingSenderId: "215156053764",
+    appId: "1:215156053764:web:eee6d626698082b971a251",
+    measurementId: "G-JFBFR7VB6T"
+  };
 
 const app = initializeApp(firebaseConfig);
 
@@ -136,24 +137,23 @@ function applySyntaxHighlighting(text) {
   let highlightedText = '';
   let cursor = 0;
 
-  const processedText = text.replace(/;[^\n]*|".*?"|'.*?'|`.*?`/g, (match) => {
+  const processedText = text.replace(syntaxRules[1], (match) => {
     const className = match.startsWith(';') ? 'comment' : 'string';
     return `<span class="${className}">${match}</span>`;
   });
 
   
-  highlightedText = processedText.replace(/#?\$\d+(\.\d+)?\b/g
-, (match) => {
+  highlightedText = processedText.replace(syntaxRules[2], (match) => {
     return `<span class="number">${match}</span>`;
-  }).replace(/#?\$0x[0-9a-fA-F]+\b/g, (match) => {
+  }).replace(syntaxRules[3], (match) => {
     return `<span class="number-hex">${match}</span>`;
-  }).replace(/#?\$0b[01]+\b/g, (match) => {
+  }).replace(syntaxRules[4], (match) => {
     return `<span class="number-bin">${match}</span>`;
   });
 
-  highlightedText = highlightedText.replace(syntaxRules[0].regex), (match) => {
+  highlightedText = highlightedText.replace(syntaxRules[0], (match) => {
     return `<span class="keyword">${match}</span>`;
-  }).replace(/\.[a-zA-Z0-9_]+:/g, (match) => {
+  }).replace(syntaxRules[5], (match) => {
     return `<span class="label">${match}</span>`;
   });
 
@@ -163,13 +163,12 @@ function applySyntaxHighlighting(text) {
 
 const syntaxRules = [
   
-  { regex: /\b(nop|lda|ldx|ldy|sta|stx|sty|adc|sbc|and|ora|eor|cmp|cpx|cpy|bit|inc|inx|iny|dec|dex|dey|bcc|bcs|beq|bmi|bne|bpl|bvc|bvs|jmp|jsr|rts|pha|php|pla|plp|tax|tay|txa|tya|tsx|txs|wrt|wrb|dsb|clb|cls|lsr|lsl|ssb|ror|rol)\b/g, className: 'keyword' },
-  { regex: /".*?"|'.*?'|`.*?`/g, className: 'string' },
-  { regex: /;[^\n]*/g, className: 'comment' },  // Match comments starting with ";"
-  { regex: /#?\$\d+(\.\d+)?\b/g, className: 'number' },  // Match numbers (decimal, hex, binary)
-  { regex: /#?\$0x[0-9a-fA-F]+\b/g, className: 'number-hex' },  // Match hexadecimal numbers
-  { regex: /#?\$0b[01]+\b/g, className: 'number-bin' },  // Match binary numbers
-  { regex:  /\.[a-zA-Z0-9_]+:/g, className: 'label'}
+  /\b(lda|ldx|ldy|sta|stx|sty|adc|sbc|cmp|cpx|cpy|inc|inx|iny|dec|dex|dey|bcc|bcs|beq|bmi|bne|bpl|jmp|jsr|rts|pha|pla|tax|tay|txa|tya|wrt|dsp)\b/g,
+  /;[^\n]*|".*?"|'.*?'|`.*?`/g,
+  /#?\$\d+(\.\d+)?\b/g,   // Match numbers (decimal, hex, binary)
+  /#?\$0x[0-9a-fA-F]+\b/g,  // Match hexadecimal numbers
+  /#?\$0b[01]+\b/g,   // Match binary numbers
+  /\.[a-zA-Z0-9_]+:/g
 
 ];
 
