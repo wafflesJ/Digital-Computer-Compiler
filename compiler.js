@@ -42,7 +42,7 @@ export function Compile() {
 function MakeBinary() {
   let binary="";
   let line=0;
-  let lineNums=[];
+  let lineNums=[0];
   for (let i = 0; i < Instuctions.length; i++) {
     line+=binaryCodes[Instuctions[i].op].inc;
     lineNums.push(line);
@@ -69,7 +69,7 @@ function MakeBinary() {
       }
       
       if(code.label) {
-        binary+=lineNums[code.value-1].toString(2).padStart(8, "0");
+        binary+=lineNums[code.value].toString(2).padStart(8, "0");
       } else if(code.value!=undefined)
         binary+=code.value.toString(2).padStart(8, "0");
       if(code.op==33) {//dsp
@@ -133,7 +133,8 @@ const binaryCodes = [
   {base:"00100010 10000000\n",follow:"00000000 00000000\n",inc:2},//txa
   {base:"10100010 10000000\n",follow:"00000000 00000000\n",inc:2},//tya
   {base:"00000000 ",address:"00000000 ",follow:"\n",inc:2},//wrt WIP
-  {base:"00000000 ",address:"00000001 ",follow:"\n",inc:2}//dsp
+  {base:"00000000 ",address:"00000001 ",follow:"\n",inc:2},//dsp
+  {base:"01100010 00000110\n00000000 00000000",follow:"\n",inc:2}//dsp
 
 
 ];
@@ -261,7 +262,7 @@ const symbols = [
   'inx', 'iny', 'dec', 'dex', 'dey', 'bcc',
   'bcs', 'beq', 'bmi', 'bne', 'bpl', 'jmp',
   'jsr', 'rts', 'pha', 'pla', 'tax', 'tay',
-  'txa', 'tya', 'wrt', 'dsp'
+  'txa', 'tya', 'wrt', 'dsp', 'key'
 ];
 
 const actions = new Map([
@@ -298,7 +299,9 @@ const actions = new Map([
   ['txa', () => Instuctions.push({op: 30})],
   ['tya', () => Instuctions.push({op: 31})],
   ['wrt', (value,valueB,valueC) => Instuctions.push({op: 32, ...convert(valueB,valueC), col:colour(value)})],
-  ['dsp', (value,valueB,valueC) => Instuctions.push({op: 33, ...convert(valueB,valueC), col:colour(value)})]
+  ['dsp', (value,valueB,valueC) => Instuctions.push({op: 33, ...convert(valueB,valueC), col:colour(value)})],
+  ['key', () => Instuctions.push({op: 34})]
+
 ]);
 
  
