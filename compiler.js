@@ -95,6 +95,7 @@ function MakeBinary() {
       binary+=binaryCodes[code.op].follow;
       line+=binaryCodes[code.op].inc;
   }
+  for(let i=line;i<256;i++)binary+="00000000 00000000\n";
   Output.innerHTML=binary;
 }
 
