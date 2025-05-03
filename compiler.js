@@ -44,7 +44,10 @@ function MakeBinary() {
   let line=0;
   let lineNums=[0];
   for (let i = 0; i < Instuctions.length; i++) {
-    line+=binaryCodes[Instuctions[i].op].inc;
+    let code = Instuctions[i];
+    line+=binaryCodes[code.op].inc;
+    if(code.address!=undefined&&code.base!=undefined&&code.col==undefined)
+      line++;
     lineNums.push(line);
   }
   line=0;
