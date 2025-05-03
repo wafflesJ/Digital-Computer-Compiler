@@ -89,13 +89,12 @@ function MakeBinary() {
           }
           if(code.ofset=="X") bits|=0b0100;
           if(code.ofset=="Y") bits|=0b0010;
-          binary+=bits.toString(2).padStart(4, '0');
-      }
-      
-      binary+=binaryCodes[code.op].follow;
+          binary+=bits.toString(2).padStart(4, '0')+"\n";
+      } else
+        binary+=binaryCodes[code.op].follow;
       line+=binaryCodes[code.op].inc;
   }
-  for(let i=line;i<256;i++)binary+="00000000 00000000\n";
+  //for(let i=line;i<256;i++)binary+="00000000 00000000\n";
   Output.innerHTML=binary;
 }
 
@@ -108,9 +107,9 @@ const binaryCodes = [
   {address:"10100000 ",follow:"\n",inc:2},//sty
   {base:"01110000 ",address:"10010000 ",follow:"\n",inc:1},//adc
   {base:"11110000 ",address:"01010000 ",follow:"\n",inc:1},//sbc
-  {base:"11000110 00000000\n00000000 00000000\n00000010 00000000\n",follow:" 00000000\n",inc:4},//cmp
-  {base:"00100110 00000000\n00000000 00000000\n00000010 00000000\n",follow:" 00000000\n",inc:4},//cpx
-  {base:"10100110 00000000\n00000000 00000000\n00000010 00000000\n",follow:" 00000000\n",inc:4},//cpy
+  {base:"11000010 00000000\n00000000 00000000\n00000110 00000000\n",address:"11000010 00000000\n00000000 00000000\n11111110 ",follow:" 00000000\n",inc:4},//cmp
+  {base:"00100010 00000000\n00000000 00000000\n00000110 00000000\n",address:"00100010 00000000\n00000000 00000000\n11111110 ",follow:" 00000000\n",inc:4},//cpx
+  {base:"10100010 00000000\n00000000 00000000\n00000110 00000000\n",address:"10100010 00000000\n00000000 00000000\n11111110 ",follow:" 00000000\n",inc:4},//cpy ADDING EXTRA MEM BIT
   {address:"10000000 ",follow:"\n",inc:2},//inc
   {base:"10000010 01000000\n00000000 00000000",follow:"\n",inc:2},//inx
   {base:"10000010 00100000\n00000000 00000000",follow:"\n",inc:2},//iny
@@ -304,11 +303,4 @@ const actions = new Map([
 
 ]);
 
- 
-
-
 document.getElementById("compile").addEventListener("click", Compile);
-
-
-
-
