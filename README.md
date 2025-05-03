@@ -24,7 +24,7 @@ Labels are writen startign with `.` , ending with `:` and are one world. Jump In
 ```
 .loop:   ;This is a label
 inx      ;Increment X register
-cmx $12  ;Compare X register to 12
+cpx $12  ;Compare X register to 12
 bne loop ;Continue to loop until X equals 12
 ```
 **Constant Memory Addresses:**   
