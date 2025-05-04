@@ -76,8 +76,8 @@ function MakeBinary() {
       } else if(code.value!=undefined)
         binary+=code.value.toString(2).padStart(8, "0");
       if(code.op==33) {//dsp
-        binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
-        binary+=" "+(code.col&0xF00>>8).toString(2).padStart(4, '0');
+        binary+="\n"+((code.col&0xFF0)>>4).toString(2).padStart(8, '0');
+        binary+=" "+(code.col&0x00F).toString(2).padStart(4, '0');
       }
       if(code.op==32) {//wrt
         binary+="\n"+(code.col&255).toString(2).padStart(8, '0');
